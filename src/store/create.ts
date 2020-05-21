@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import ReduxThunk from "redux-thunk";
 import { AppThunkContext, AppStore } from "./types";
-import rootReducers from "../reducers";
+import rootReducers from "reducers";
 
 export const composeEnhancers =
   (process.env.NODE_ENV === "development" &&

@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
-import logo from "./logo.svg";
-import "App.css";
-import { Provider } from "react-redux";
-import { createAppStore } from "store/create";
+import React, { useEffect, useState } from "react";
 import Pubnub from "pubnub";
-import { createPubNubListener } from "pubnub-redux";
 import { PubNubProvider } from "pubnub-react";
+import { Provider } from "react-redux";
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { createPubNubListener } from "pubnub-redux";
+
+import { Menu, MenuItemProps } from "semantic-ui-react";
+
+import { createAppStore } from "store/create";
+
+import Login from "components/auth/Login";
+import Home from "components/home/Home";
+import Chat from "components/chat/Chat";
 
 const pubnubConfig = Object.assign(
   {},
@@ -28,6 +34,13 @@ const store = createAppStore({
 const leaveApplication = () => pubnub.unsubscribeAll();
 
 const App: React.FC = () => {
+  const [activeItem, setActiveItem] = useState("home");
+
+  const handleMenuClick = (
+    _: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    { name }: MenuItemProps
+  ) => name && setActiveItem(name);
+
   useEffect(() => {
     pubnub.addListener(createPubNubListener(store.dispatch));
     // pubnub.addListener(createTypingIndicatorsListener(store.dispatch));
@@ -41,22 +54,48 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <PubNubProvider client={pubnub}>
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.tsx</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        </div>
+        <BrowserRouter>
+          <Menu>
+            <Link to="/">
+              <Menu.Item
+                name="home"
+                active={activeItem === "home"}
+                onClick={handleMenuClick}
+              >
+                Home
+              </Menu.Item>
+            </Link>
+            <Link to="/login">
+              <Menu.Item
+                name="login"
+                active={activeItem === "login"}
+                onClick={handleMenuClick}
+              >
+                Login
+              </Menu.Item>
+            </Link>
+            <Link to="/chat">
+              <Menu.Item
+                name="chat"
+                active={activeItem === "chat"}
+                onClick={handleMenuClick}
+              >
+                Chat
+              </Menu.Item>
+            </Link>
+          </Menu>
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/chat">
+              <Chat />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </BrowserRouter>
       </PubNubProvider>
     </Provider>
   );
