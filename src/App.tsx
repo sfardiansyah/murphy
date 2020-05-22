@@ -56,33 +56,33 @@ const App: React.FC = () => {
       <PubNubProvider client={pubnub}>
         <BrowserRouter>
           <Menu>
-            <Link to="/">
-              <Menu.Item
-                name="home"
-                active={activeItem === "home"}
-                onClick={handleMenuClick}
-              >
-                Home
-              </Menu.Item>
-            </Link>
-            <Link to="/login">
-              <Menu.Item
-                name="login"
-                active={activeItem === "login"}
-                onClick={handleMenuClick}
-              >
-                Login
-              </Menu.Item>
-            </Link>
-            <Link to="/chat">
-              <Menu.Item
-                name="chat"
-                active={activeItem === "chat"}
-                onClick={handleMenuClick}
-              >
-                Chat
-              </Menu.Item>
-            </Link>
+            <Menu.Item
+              name="home"
+              as={Link}
+              to="/"
+              active={activeItem === "home"}
+              onClick={handleMenuClick}
+            >
+              Home
+            </Menu.Item>
+            <Menu.Item
+              name="login"
+              as={Link}
+              to="/login"
+              active={activeItem === "login"}
+              onClick={handleMenuClick}
+            >
+              Login
+            </Menu.Item>
+            <Menu.Item
+              name="chat"
+              as={Link}
+              to="/chat"
+              active={activeItem === "chat"}
+              onClick={handleMenuClick}
+            >
+              Chat
+            </Menu.Item>
           </Menu>
           <Switch>
             <Route path="/login">

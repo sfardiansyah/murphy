@@ -13,6 +13,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
+    "formik": "^2.1.4",
     "pubnub": "^4.27.6",
     "pubnub-react": "^2.0.0",
     "pubnub-redux": "^0.0.9-beta",
