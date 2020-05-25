@@ -4,8 +4,10 @@ interface CustomUserFields {
   title: string;
 }
 
-export type User = Required<Pick<PubNubUser, "id" | "name" | "profileUrl">> & {
+export type ChatUser = Required<
+  Pick<PubNubUser, "id" | "name" | "profileUrl">
+> & {
   custom: CustomUserFields;
 };
 
-export const userReducer = createUserReducer<User>();
+export const userReducer = createUserReducer<ChatUser>();

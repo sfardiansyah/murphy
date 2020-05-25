@@ -1,70 +1,76 @@
-import React, { useEffect, useState } from "react";
-import Pubnub from "pubnub";
-import { PubNubProvider } from "pubnub-react";
-import { Provider } from "react-redux";
+import React, { useEffect, useState, useCallback } from "react";
+import { usePubNub } from "pubnub-react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { createPubNubListener } from "pubnub-redux";
 
 import { Menu, MenuItemProps } from "semantic-ui-react";
 
-import { createAppStore } from "store/create";
-
 import Login from "components/auth/Login";
 import Home from "components/home/Home";
 import Chat from "components/chat/Chat";
+import GuestRoute from "components/routes/GuestRoute";
+import UserRoute from "components/routes/UserRoute";
 
-const pubnubConfig = Object.assign(
-  {},
-  {
-    restore: true,
-    heartbeatInterval: 0,
-    publishKey: "pub-c-03740331-d324-4488-aee1-9a3e0e3fe47f",
-    subscribeKey: "sub-c-ba3d0034-9ac5-11ea-8d30-d29256d12d3d",
-  }
-  // keyConfiguration
-);
-const pubnub = new Pubnub(pubnubConfig);
+import { logout } from "reducers/auth/actions";
 
-const store = createAppStore({
-  pubnub: {
-    api: pubnub,
-  },
-});
-
-const leaveApplication = () => pubnub.unsubscribeAll();
+import { RootState } from "reducers/types";
 
 const App: React.FC = () => {
   const [activeItem, setActiveItem] = useState("home");
+
+  const dispatch = useDispatch();
+  const pubnub = usePubNub();
+  const isLoggedIn = useSelector((state: RootState) => !!state.user.id);
 
   const handleMenuClick = (
     _: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     { name }: MenuItemProps
   ) => name && setActiveItem(name);
 
+  const leaveApplication = useCallback(() => pubnub.unsubscribeAll(), [pubnub]);
+
   useEffect(() => {
-    pubnub.addListener(createPubNubListener(store.dispatch));
+    pubnub.addListener(createPubNubListener(dispatch));
     // pubnub.addListener(createTypingIndicatorsListener(store.dispatch));
     return leaveApplication;
-  }, []);
+  }, [pubnub, dispatch, leaveApplication]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", leaveApplication);
-  }, []);
+  }, [leaveApplication]);
+
+  console.log(isLoggedIn);
 
   return (
-    <Provider store={store}>
-      <PubNubProvider client={pubnub}>
-        <BrowserRouter>
-          <Menu>
-            <Menu.Item
-              name="home"
-              as={Link}
-              to="/"
-              active={activeItem === "home"}
-              onClick={handleMenuClick}
-            >
-              Home
+    <BrowserRouter>
+      <Menu>
+        <Menu.Item
+          name="home"
+          as={Link}
+          to="/"
+          active={activeItem === "home"}
+          onClick={handleMenuClick}
+        >
+          Home
+        </Menu.Item>
+        {isLoggedIn && (
+          <Menu.Item
+            name="chat"
+            as={Link}
+            to="/chat"
+            active={activeItem === "chat"}
+            onClick={handleMenuClick}
+          >
+            Chat
+          </Menu.Item>
+        )}
+        <Menu.Menu position="right">
+          {isLoggedIn ? (
+            <Menu.Item name="logout" onClick={() => dispatch(logout())}>
+              Logout
             </Menu.Item>
+          ) : (
             <Menu.Item
               name="login"
               as={Link}
@@ -74,30 +80,21 @@ const App: React.FC = () => {
             >
               Login
             </Menu.Item>
-            <Menu.Item
-              name="chat"
-              as={Link}
-              to="/chat"
-              active={activeItem === "chat"}
-              onClick={handleMenuClick}
-            >
-              Chat
-            </Menu.Item>
-          </Menu>
-          <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/chat">
-              <Chat />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      </PubNubProvider>
-    </Provider>
+          )}
+        </Menu.Menu>
+      </Menu>
+      <Switch>
+        <GuestRoute path="/login">
+          <Login />
+        </GuestRoute>
+        <UserRoute path="/chat">
+          <Chat />
+        </UserRoute>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 };
 
