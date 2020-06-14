@@ -1,8 +1,8 @@
 import { Store } from "redux";
+import { PubnubThunkContext } from "pubnub-redux";
+import { AppState } from "reducers/types";
 
-export interface AppThunkContext {}
-
-export type AppState = {};
+export type AppThunkContext = PubnubThunkContext;
 
 export type AppActions = {
   type: string;

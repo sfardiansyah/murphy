@@ -6,7 +6,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { createAppStore } from "store/create";
 
-// import "./index.css";
+import "./custom.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import setAuthorizationHeader from "utils/setAuthorizationHeader";
@@ -14,6 +14,9 @@ import { userLoggedIn } from "reducers/auth";
 import { Provider } from "react-redux";
 import { PubNubProvider } from "pubnub-react";
 import { User } from "reducers/auth/types";
+// import { fetchUserById, fetchMemberships } from "pubnub-redux";
+// import { getConversationsByUserId } from "reducers/membership";
+// import { ThunkAction } from "store/types";
 
 const pubnubConfig = Object.assign(
   {},
@@ -39,6 +42,46 @@ if (localStorage.laywookJWT) {
 
   setAuthorizationHeader(localStorage.laywookJWT);
   store.dispatch(userLoggedIn(user));
+
+  // store.dispatch((dispatch, getState, context) => {
+  //   context.pubnub.api.setUUID(id);
+
+  //   const isLoginSuccessful = dispatch(
+  //     fetchUserById({ userId: id }) as ThunkAction<Promise<void>>
+  //   )
+  //     .then(() =>
+  //       context.pubnub.api.subscribe({
+  //         channels: [user.id],
+  //         withPresence: true,
+  //       })
+  //     )
+  //     .then(() =>
+  //       dispatch(
+  //         fetchMemberships({
+  //           userId: user.id,
+  //           include: {
+  //             spaceFields: true,
+  //             customSpaceFields: false,
+  //             customFields: false,
+  //             totalCount: false,
+  //           },
+  //         })
+  //       )
+  //     )
+  //     .then(() => {
+  //       // Subscribe to messages on the user's joined conversations
+  //       const conversationChannels = getConversationsByUserId(getState())[
+  //         user.id
+  //       ].map((membership) => membership.id);
+
+  //       context.pubnub.api.subscribe({
+  //         channels: conversationChannels,
+  //         withPresence: true,
+  //       });
+  //     });
+
+  //   return Promise.all([isLoginSuccessful]);
+  // });
 }
 
 ReactDOM.render(
