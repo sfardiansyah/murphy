@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "semantic-ui-react";
+import { Container, Button, Icon } from "semantic-ui-react";
 
 import img from "tree.svg";
 
@@ -25,16 +25,20 @@ const ComingSoon: React.FC = () => (
       >
         PLEASE COME BACK LATER!
       </h2>
-      <a
-        href="https://twitter.com/laywookcom?ref_src=twsrc%5Etfw"
-        className="twitter-follow-button"
-        data-size="large"
-        data-show-screen-name="false"
-        data-lang="en"
-        data-show-count="false"
-      >
-        Follow @laywookcom
-      </a>
+      <div style={{ marginTop: 36 }}>
+        <Button as="a" color="blue" primary href="https://saweria.co/laywook">
+          <Icon name="gift" />
+          Donate
+        </Button>
+        <Button
+          as="a"
+          color="twitter"
+          href="https://twitter.com/laywookcom?ref_src=twsrc%5Etfw"
+        >
+          <Icon name="twitter" />
+          Follow
+        </Button>
+      </div>
     </Container>
   </div>
 );

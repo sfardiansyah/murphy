@@ -39,6 +39,13 @@ const App: React.FC = () => {
         <Route path="/home">
           <Home />
         </Route>
+        <Route
+          path="/donasi"
+          component={() => {
+            window.location.replace("https://saweria.co/laywook");
+            return null;
+          }}
+        />
         <Route path="/">
           <ComingSoon />
         </Route>
