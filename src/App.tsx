@@ -37,9 +37,9 @@ const App: React.FC = () => {
         <UserRoute path="/chat">
           <Chat />
         </UserRoute>
-        <UserRoute path="/calculator">
+        <Route path="/calculator">
           <Calculator />
-        </UserRoute>
+        </Route>
         <Route path="/home">
           <Home />
         </Route>
