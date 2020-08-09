@@ -10,6 +10,7 @@ import Chat from "components/chat/Chat";
 import GuestRoute from "components/routes/GuestRoute";
 import UserRoute from "components/routes/UserRoute";
 import ComingSoon from "components/comingSoon/ComingSoon";
+import Calculator from "components/calculator";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,9 @@ const App: React.FC = () => {
         </GuestRoute>
         <UserRoute path="/chat">
           <Chat />
+        </UserRoute>
+        <UserRoute path="/calculator">
+          <Calculator />
         </UserRoute>
         <Route path="/home">
           <Home />

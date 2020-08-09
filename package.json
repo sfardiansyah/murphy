@@ -16,6 +16,7 @@
     "@types/redux-thunk": "^2.1.0",
     "axios": "^0.19.2",
     "formik": "^2.1.4",
+    "iframe-resizer-react": "^1.0.4",
     "jwt-decode": "^2.2.0",
     "pubnub": "^4.27.6",
     "pubnub-react": "^2.0.0",

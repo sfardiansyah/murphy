@@ -3,6 +3,10 @@
   src: local("Norwester"), url("./norwester.otf");
 }
 
+body {
+  background-color: #f3ebde;
+}
+
 .title {
   font-weight: 400;
   font-size: 120px;
@@ -12,5 +16,9 @@
 @media screen and (max-width: 600px) {
   .title {
     font-size: 48px;
+  }
+
+  .menuItem {
+    font-size: medium;
   }
 }
